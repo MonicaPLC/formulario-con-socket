@@ -1,0 +1,26 @@
+h2 {
+  text-align: center;
+}
+
+#formulario {
+  padding: 30px;
+  margin-top: 20px;
+  border: 2px solid blue;
+  border-radius: 20px;
+  background-image: url(../img/globos.jpg);
+}
+
+#name {
+  border: 1px solid black;
+}
+
+#location {
+  border: 1px solid black;
+}
+
+#language {
+  border: 1px solid black;
+}
+#tx {
+  border: 1px solid black;
+}

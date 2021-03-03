@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="utf-8" />
+  <script src='https://code.jquery.com/jquery-3.5.1.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet'
+    integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous'>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js'
+    integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0'
+    crossorigin='anonymous'></script>
+  <link rel="stylesheet" type="text/css" href="css/estilos.css" />
+  <title></title>
+</head>
+
+<body>
+
+  <div id="numero"></div>
+  <div id="mensaje"></div>
+
+  <div class="container">
+
+    <form class="form-control" id="formulario">
+      <h2>Formulario de ingreso</h2>
+      <input id="name" name="name" type="text" class="form-control" placeholder="Escribe tu nombre">
+
+      <br>
+      <select id="location" class="form-control">
+        <option selected>Elije una ciudad</option>
+        <option value="Temuco">Temuco</option>
+        <option value="Padre Las Casas">Padre Las Casas</option>
+        <option value="Villarrica">Villarica</option>
+      </select>
+      <br>
+      <select id="language" class="form-control">
+        <option selected>Elije un lenguaje</option>
+        <option value="CSS">CSS</option>
+        <option value="Javascript">Javascript</option>
+        <option value="HTML">HTML</option>
+      </select>
+      <br>
+
+      <label for="textarea">Escribe tu mensaje</label>
+      <textarea id="tx" class="form-control"></textarea>
+      <button type="submit" class="btn btn-primary my-1">Submit</button>
+    </form>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    //tengo que poner esta variable
+    const socket = io('http://localhost:8000');
+
+    //para que el formulario no se envíe
+    $("#formulario").on("submit", function (event) {
+
+      event.preventDefault();
+
+      // creo mi objeto, NO SE ENVIA POR FORM, llega por navegador.
+      const datos = {
+        name: $("#name").val(),
+        location: $("#location").val(),
+        language: $("#language").val(),
+        message: $("#message").val()
+      }
+
+      socket.emit('formulario_publicacion', datos);
+      console.log(datos);
+    });
+
+
+
+    // MENSAJES::::::ENVIO(EMIT)::::::::::ON(RECIBO)
+
+
+    socket.on('mensaje_actualizado', function (datos) {
+      $("#mensaje").html(`La persona${datos.name} vive en ${datos.location}, su lenguaje favorito
+      es ${datos.language} y tiene el siguiente mensaje para ti:${datos.message}`);
+      console.log('mensaje_actualizado', datos);
+    });
+
+    socket.on("numero_aleatorio", function (numero) {
+      $("#numero").html(numero.numero);
+    });
+
+
+
+
+  </script>
+</body>
+
+</html>
